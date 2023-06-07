@@ -1,0 +1,44 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Đăng Ký";
+}
+
+<div class="parent clearfix">
+    <div class="bg-illustration">
+    </div>
+    <div class="login">
+        <div class="container" style="margin: 0px ;margin-top:20px">
+            <h1>Đăng ký để tạo<br />Tài khoản của bạn</h1>
+            <div class="login-form" style="margin-top : 30px">
+                <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <input asp-for="Input.AccountName" class="form-control" placeholder="Tài Khoản" />
+                        <span asp-validation-for="Input.AccountName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="Input.Email" class="form-control" placeholder="Địa Chỉ E-mail" />
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="Input.Password" class="form-control" placeholder="Mật Khẩu" />
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="Input.ConfirmPassword" class="form-control" placeholder="Nhập Lại Mật Khẩu" />
+                        <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group d-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary mt-0">Đăng Ký</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

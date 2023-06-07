@@ -1,0 +1,28 @@
+﻿@page 
+@model ClothesShop.Areas.Admin.Pages.User.IndexModel
+@{
+    ViewData["Title"] = "Danh sách các thành viên";
+}
+<div style="padding-left: 62px;padding-top: 15px;">
+
+<h2>@ViewData["Title"]</h2>
+<partial name="_StatusMessage" model="Model.StatusMessage" />
+
+<table class="table">
+    <tr>
+        <th>Tên User</th>
+        <th>Vai trò (role)</th>
+        <th>Tác vụ</th>
+    </tr>
+    @foreach (var user in Model.Users)
+    {
+        <tr>
+            <td>@user.Email</td>
+            <td>@user.RoleNames</td>
+            <td>
+                <a class="btn btn-success btn-sm" asp-area="Admin" asp-page="../User/AddRole" asp-route-id="@user.Id">Thêm Role</a>
+            </td>
+        </tr>
+    }
+</table>
+</div>

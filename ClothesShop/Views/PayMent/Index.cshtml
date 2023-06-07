@@ -1,0 +1,75 @@
+﻿@model ClothesShop.Controllers.PayMentController
+@{
+    ViewData["Title"] = "Thanh Toán";
+    var product = ViewData["product"] as List<Product>;
+    var cart = ViewData["cart"] as List<CartModel>;
+}
+<!-- Checkout Start -->
+<div class="container-fluid pt-5">
+    <div class="row px-xl-5">
+        <div class="col-lg-7">
+            <div class="mb-4">
+                <h4 class="font-weight-semi-bold mb-4">Billing Address</h4>
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <label asp-for="Input.FullName"></label>
+                        <input class="form-control" type="text" placeholder="John">
+                        <span asp-validation-for="Input.FullName " class="text-danger"></span>
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <label asp-for="Input.Email"></label>
+                        <input class="form-control" type="text" placeholder="example@email.com">
+                        <span asp-validation-for="Input.Email " class="text-danger"></span>
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <label asp-for="Input.PhoneNumber"></label>
+                        <input class="form-control" type="text" placeholder="0913000000">
+                        <span asp-validation-for="Input.PhoneNumber " class="text-danger"></span>
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <label asp-for="Input.Address"></label>
+                        <input class="form-control" type="text" placeholder="123 Street">
+                        <span asp-validation-for="Input.Address " class="text-danger"></span>
+                    </div>
+                    
+                </div>
+            </div> 
+        </div>
+        <div class="col-lg-5">
+            <div class="card border-secondary mb-5">
+                <div class="card-header bg-secondary border-0">
+                    <h4 class="font-weight-semi-bold m-0">Order Total</h4>
+                </div>
+                <div class="card-body">
+                    <h5 class="font-weight-medium mb-3">Products</h5>
+                    @foreach(var c in cart)
+                    {
+                        var a = product.FirstOrDefault(product => product.Id == c.Id);
+                        <div class="d-flex justify-content-between">
+                            <p>@a.Name</p>
+                            <p>@String.Format("{0:#,###,###}",(Convert.ToDouble((c.ThanhTien))))VNĐ</p>
+                        </div>
+                    }
+                </div>
+                <div class="card-footer border-secondary bg-transparent">
+                    <div class="d-flex justify-content-between mt-2">
+                        <h5 class="font-weight-bold">Total</h5>
+                        <h5 class="font-weight-bold">@String.Format("{0:#,###,###}",(Convert.ToDouble((ViewBag.Sum))))VNĐ</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="card border-secondary mb-5">
+                <div class="card-header bg-secondary border-0">
+                    <h4 class="font-weight-semi-bold m-0">Payment</h4>
+                </div>
+                <div class="card-footer border-secondary bg-transparent">
+                    <button class="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3">Thanh Toán</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Checkout End -->
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

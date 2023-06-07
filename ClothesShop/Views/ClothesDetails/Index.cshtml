@@ -1,0 +1,165 @@
+﻿@model ClothesShop.Models.Product
+@using ClothesShop.Models
+@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<AppUser> SignInMannager
+@inject UserManager<AppUser> UserManager
+
+@{
+    ViewData["Title"] = "Chi Tiết - " + Model.Name;
+    var products = ViewData["products"] as List<Product>;
+    var rating = ViewData["ratings"] as List<Rating>;
+    
+
+}
+<div class="container-fluid py-5">
+    <div class="row px-xl-5">
+            <div class="col-lg-5 pb-5">
+               <div class="carousel-inner border">
+                  <div class="carousel-item active">
+                    <img class="w-100 h-100" src="~/img/@Model.Image" alt="Image">
+                  </div>
+               </div>
+            </div>
+
+            <div class="col-lg-7 pb-5">
+            <h3 class="font-weight-semi-bold">@Model.Name</h3>
+                <div class="d-flex mb-3">
+                    <div class="text-primary mr-2">
+                    @for(int i = 1; i<=Model.Evaluate; i++)
+                    {
+                        <small class="fas fa-star"></small>
+                    }
+                    </div>
+                <small class="pt-1">(@ViewBag.Count Đánh Giá)</small>
+                </div>
+
+            <h3 class="font-weight-semi-bold mb-4">@(String.Format("{0:###,000}", (Model.Price - (Model.Price * Model.Discount)))) VNĐ</h3>
+            @*<p class="mb-4">Volup erat ipsum diam elitr rebum et dolor. Est nonumy elitr erat diam stet sit clita ea. Sanc invidunt ipsum et, labore clita lorem magna lorem ut. Erat lorem duo dolor no sea nonumy. Accus labore stet, est lorem sit diam sea et justo, amet at lorem et eirmod ipsum diam et rebum kasd rebum.</p>*@
+              
+            <div class="d-flex align-items-center mb-4 pt-2">
+                @if (SignInMannager.IsSignedIn(User))
+                {
+                    <a type="button" asp-controller="CartItem" asp-action="AddToCart" asp-route-id="@Model.Id" class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i>Thêm Giỏ Hàng</a>
+                }
+                else{
+                    <a type="button" asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i>Thêm Giỏ Hàng</a>
+                
+                }
+            </div>
+               
+        </div>
+        <div class="row px-xl-5">
+            <div class="col">
+                <div class="nav nav-tabs justify-content-center border-secondary mb-4">
+                    <a class="nav-item nav-link active" data-toggle="tab" href="#tab-pane-1">Mô Tả</a>
+                    <a class="nav-item nav-link" data-toggle="tab" href="#tab-pane-3">Đánh Giá (@ViewBag.Count)</a>
+                </div>
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="tab-pane-1">
+                        <h4 class="mb-3">Thông Tin Sản Phẩm</h4>
+                        <p>@Model.Description</p>
+
+                    </div>
+
+                    <div class="tab-pane fade" id="tab-pane-3">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4 class="mb-4">@ViewBag.Count đánh giá cho "@Model.Name"</h4>
+                                <div class="media mb-4">
+                                    <div class="media-body">
+                                        @foreach(var r in rating)
+                                        {
+                                        <h6>@r.Name<small> - <i>@r.Datetime</i></small></h6>
+                                        <div class="text-primary mb-2">
+                                            @for(int i = 1; i <= r.Star; i++)
+                                            {
+                                                <i class="fas fa-star"></i>    
+                                            }
+                                        </div>
+                                            
+                                        }
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h4 class="mb-4">Để Lại Đánh Giá</h4>
+                                <div class="d-flex my-3">
+                                    <p class="mb-0 mr-2">Đánh Giá Của Bạn * :</p>
+                                    <div class="star_rating text-primary text-center">
+                                        <button class="star">&#9734;</button>
+                                        <button class="star">&#9734;</button>
+                                        <button class="star">&#9734;</button>
+                                        <button class="star">&#9734;</button>
+                                        <button class="star">&#9734;</button>
+                                        <p class="current_rating">0 / 5</p>
+                                    </div>
+                                    
+                                </div>
+                            @if (SignInMannager.IsSignedIn(User))
+                            {
+                                <form method="post" asp-action="Index" asp-controller="ClothesDetails">
+                                    <input name="totalStars" value="0" id="action_total_star" style="visibility: hidden" />
+                                    <div class="form-group mb-0">
+                                        <input type="submit" value="Gửi" class="btn btn-primary px-3">
+                                    </div>
+                                </form>
+                            }
+                            else
+                            {
+                                <form asp-area="Identity" asp-page="/Account/Login">
+                                    <input name="totalStars" value="0" id="action_total_star" style="visibility: hidden" />
+                                    <div class="form-group mb-0">
+                                        <input type="submit" value="Gửi" class="btn btn-primary px-3">
+                                    </div>
+                                </form>
+                            }
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>  
+</div>
+<div class="container-fluid py-5">
+    <div class="text-center mb-4">
+        <h2 class="section-title px-5"><span class="px-2">Sản Phẩm Liên Quan</span></h2>
+    </div>
+    <div class="row px-xl-5">
+        <div class="col">
+            <div class="owl-carousel related-carousel">
+                @foreach (var p in products)
+                {
+                    <div class="card product-item border-0">
+                        <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
+                            <img class="img-fluid w-100" src="~/img/@p.Image" alt="">
+                        </div>
+                        <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
+                            <h6 class="text-truncate mb-3">@p.Name</h6>
+                            <div class="d-flex justify-content-center">
+                                <h6>@(String.Format("{0:###,000}", (p.Price - (p.Price * p.Discount)))) VNĐ</h6><h6 class="text-muted ml-2"><del>@(String.Format("{0:###,000}", p.Price)) VNĐ</del></h6>
+                            </div>
+                        </div>
+                        <div class="card-footer d-flex justify-content-between bg-light border">
+                            <a asp-controller="ClothesDetails" asp-action="Index" asp-route-id="@p.Id" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>Chi Tiết</a>
+                            @if (SignInMannager.IsSignedIn(User))
+                            {
+                                <a asp-controller="CartItem" asp-action="AddToCart" asp-route-id="@p.Id" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Thêm Giỏ Hàng</a>
+                            }
+                            else
+                            {
+                                <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Thêm Giỏ Hàng</a>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+   
+<!--Shop Detail End -->
+
+<

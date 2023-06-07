@@ -1,0 +1,13 @@
+﻿.star_rating{
+    user-select : none;
+}
+.star {
+    font-size: 3rem;
+    color: #ff9800;
+    background-color: unset;
+    border: none;
+}
+
+.star :hover{
+    cursor : pointer;
+}

@@ -1,0 +1,88 @@
+﻿@model List<ClothesShop.Models.CartModel>
+@{
+    ViewData["Title"] = "Giỏ Hàng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var c = ViewData["product"] as List<Product>;
+}
+<div class="container-fluid pt-5">
+    <div class="row px-xl-5">
+        <div class="col-lg-8 table-responsive mb-5">
+            <table class="table table-bordered text-center mb-0">
+                <thead class="bg-secondary text-dark">
+                    <tr>
+                        <th>Sản Phẩm</th>
+                        <th>Giá</th>
+                        <th>Số Lượng</th>
+                        <th>Thành Tiền</th>
+                        <th>Xóa</th>
+                    </tr>
+                </thead>
+
+                <tbody class="align-middle">
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var p in Model)
+                        {
+
+                            <tr>
+                                @{
+                                    var a = c.FirstOrDefault(product => product.Id == p.Id);
+                                }
+                                <td class="align-middle" style="text-align:justify"><img src="img/@a.Image" alt="" style="width: 50px;">@a.Name</td>
+                                <td class="align-middle">@String.Format("{0:#,###,###}",(Convert.ToDouble((@p.Price))))VNĐ</td>
+                                <form asp-action="UpdateItem" asp-controller="CartItem" asp-route-id="@p.Id">
+                                <td class="align-middle">
+                                    <div class="input-group quantity mx-auto" style="width: 100px;">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-sm btn-primary btn-minus">
+                                                <i class="fa fa-minus"></i>
+                                            </button>
+                                        </div>
+                                        <input type="text" class="form-control form-control-sm bg-secondary text-center" name="SoLuong" value="@p.Quanlity">
+
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-sm btn-primary btn-plus">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </td>
+                                </form>
+                                <td class="align-middle">@String.Format("{0:#,###,###}",(Convert.ToDouble((p.ThanhTien))))VNĐ</td>
+                                <td class="align-middle">
+                                    <a asp-controller="CartItem" asp-action="RemoveItem" asp-route-id="@p.Id" class="btn btn-sm btn-primary"><i class="fa fa-times"></i></a>
+                                </td>
+                            </tr>
+
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <th class="align-middle">
+                                <p class="text-info text-center">Giỏ Hàng Của Bạn Trống!</p>
+                            </th>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="col-lg-4">
+
+            <div class="card border-secondary mb-5">
+                <div class="card-header bg-secondary border-0">
+                    <h4 class="font-weight-semi-bold m-0">Thành Tiền</h4>
+                </div>
+
+                <div class="card-footer border-secondary bg-transparent">
+                    <div class="d-flex justify-content-between mt-2">
+                        <h5 class="font-weight-bold">Tổng Tiền</h5>
+                        <h5 class="font-weight-bold">@String.Format("{0:#,###,###}",(Convert.ToDouble(ViewBag.Sum))) VNĐ</h5>
+                    </div>
+                    <a asp-controller="PayMent" asp-action="Index" class="btn btn-block btn-primary my-3 py-3">Thanh Toán</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Cart End -->

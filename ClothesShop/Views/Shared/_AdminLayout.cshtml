@@ -1,0 +1,13 @@
+﻿@using Microsoft.AspNetCore.Authorization;
+@inject IAuthorizationService authorizationService
+
+@{
+    var resultAuthorize =  await authorizationService.AuthorizeAsync(this.User, "ShowAdminMenu");
+}
+
+@if(resultAuthorize.Succeeded)
+{
+    <a asp-controller="Products" asp-action="Index" class="nav-item nav-link">Quản lý sản phẩm</a>
+    <a asp-area="Admin" asp-page="/Role/Index" class="nav-item nav-link">Quản lý tài khoản</a>
+}
+
